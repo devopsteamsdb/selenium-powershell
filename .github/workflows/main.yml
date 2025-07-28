@@ -27,7 +27,7 @@ jobs:
     - name: Build image
       uses: docker/build-push-action@v2
       with:
-        tags: devopsteamsdb/devopsteamsdb:jenkins2go_${{ steps.date.outputs.date }}
+        tags: devopsteamsdb/devopsteamsdb:selenium_powershell_${{ steps.date.outputs.date }}
         file: Dockerfile
     
     - name: Login to dockerhub
@@ -40,44 +40,27 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: devopsteamsdb/devopsteamsdb:jenkins2go_${{ steps.date.outputs.date }}
+        tags: devopsteamsdb/devopsteamsdb:selenium_powershell_${{ steps.date.outputs.date }}
         file: Dockerfile
         
     - name: Push image
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: devopsteamsdb/devopsteamsdb:jenkins2go_latest
+        tags: devopsteamsdb/devopsteamsdb:selenium_powershell_latest
         file: Dockerfile
 
-    - name: Send Email With SendGrid
-      uses: licenseware/send-email-notification@v1
-      with:
-        from-email: devops.team.sdb@gmail.com
-        to-email: ${{ secrets.SENDGRID_TO }}
-        api-key: ${{ secrets.SENDGRID_TOKEN }}
-        subject: Docker build Completed
-        markdown-body: "Docker tag: devopsteamsdb/devopsteamsdb:jenkins2go_${{ steps.date.outputs.date }}"
-        
     - name: docker save image
-      run: docker save devopsteamsdb/devopsteamsdb:jenkins2go_${{ steps.date.outputs.date }} | gzip > jenkins2go_${{ steps.date.outputs.date }}.gz
+      run: docker save devopsteamsdb/devopsteamsdb:selenium_powershell_${{ steps.date.outputs.date }} | gzip > selenium_powershell_${{ steps.date.outputs.date }}.gz
     
-    - name: get size of file
-      run: ls -lah
-
-    - name: Get jenkins version
-      id: jenkins_version
-      run: |
-          echo "JENKINS_VERSION=$(docker inspect devopsteamsdb/devopsteamsdb:jenkins2go_latest | jq -r '.[].Config.Env[] | select(startswith("JENKINS_VERSION=")) | split("=")[1]')" >> $GITHUB_ENV
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: jenkins2go_${{ steps.date.outputs.date }}
-        release_name: Release jenkins2go_${{ steps.date.outputs.date }}
+        tag_name: selenium_powershell_${{ steps.date.outputs.date }}
+        release_name: Release selenium_powershell_${{ steps.date.outputs.date }}
         body: |
           Jenkins Version: ${{ env.JENKINS_VERSION }}
           This will overiid by next step
