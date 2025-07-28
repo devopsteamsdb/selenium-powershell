@@ -45,7 +45,7 @@ docker run --rm \
   pwsh ./script.ps1
 ```
 
-## 🚀 Optional: run with selenium grid:*
+## 🚀 Optional: run with selenium grid:
 
 1. **Run Selenium grid**
 
@@ -53,7 +53,7 @@ Run selenium grid in the background
 ```
 docker run -d --rm -it -p 4444:4444 -p 5900:5900 -p 7900:7900 --shm-size 2g -e SE_VNC_NO_PASSWORD=true selenium/standalone-chromium:latest
 ```
-- its accesible with noVNC at http://<ip>:7900
+- its accesible with noVNC at http://[ip]:7900
 
 2. **Create a PowerShell script2 (`script2.ps1`)::**
 
